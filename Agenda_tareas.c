@@ -40,7 +40,7 @@ int main(){
 
             printf("\n--- AGREGAR NUEVA TAREA ---\n");
             printf("¿Que Tarea le gustaria agregar hoy?\n");
-            
+
             printf("1. Ingrese el Titulo: ");
             fgets(nuevaTarea.titulo, 50, stdin); // fgets obtiene lo ingresa por teclado osea "stdin" y se lo asigna a lista nuevaTarea y a "titulo", con un maximo de 50 caracteres.
             nuevaTarea.titulo[strcspn(nuevaTarea.titulo, "\n")] = 0; /** strcspn, busca en lo ingresado a "titulo" un salto de linea, el enter ya que el enter tambien lo copia 
@@ -61,9 +61,33 @@ int main(){
             printf("5. Fecha de Vencimiento: ");
             fgets(nuevaTarea.vencimiento, 15, stdin);
             nuevaTarea.vencimiento[strcspn(nuevaTarea.vencimiento, "\n")] = 0;
+            // esta parte es para crear un archivo de texto con el nombre de la tarea y guardar los datos ingresados en el archivo. Pero no si ya existe una con el mismo nombre //
+            char nombreArchivo[120];
+            snprintf(nombreArchivo, sizeof(nombreArchivo), "%s.txt", nuevaTarea.titulo);
 
-            printf("\n¡Datos guardados!\n");
-            printf("\nPresiona cualquier tecla para continuar . . .\n");
+            FILE *archivoTareas = fopen(nombreArchivo, "r");
+            if (archivoTareas != NULL) {
+                fclose(archivoTareas);
+                printf("\nYa existe una tarea con ese nombre.\n");
+            } else {
+                archivoTareas = fopen(nombreArchivo, "w");
+
+                if (archivoTareas == NULL) {
+                    printf("Error al abrir el archivo %s.\n", nombreArchivo);
+                } else {
+                    fprintf(archivoTareas, "-Nota-\n");
+                    fprintf(archivoTareas, "Titulo: %s\n", nuevaTarea.titulo);
+                    fprintf(archivoTareas, "Descripcion: %s\n", nuevaTarea.descripcion);
+                    fprintf(archivoTareas, "Estado: %s\n", nuevaTarea.estado);
+                    fprintf(archivoTareas, "Dificultad: %s\n", nuevaTarea.dificultad);
+                    fprintf(archivoTareas, "Vencimiento: %s\n", nuevaTarea.vencimiento);
+                    fprintf(archivoTareas, "-Fin Nota-\n");
+                    fclose(archivoTareas);
+
+                    printf("\n¡Tarea guardada con exito en %s!\n", nombreArchivo);
+                }
+            }
+            printf("\nPresiona Enter para continuar . . .\n");
             getchar();
         }
         else if (opcion != 0) {

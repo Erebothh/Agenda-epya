@@ -7,3 +7,9 @@ Pendiente
 
 12/12/2026
 
+Titulo: tareaprueba
+Descripcion: descripcion de prueba
+Estado: T
+Dificultad: 2
+Vencimiento: 213123
+--------------------
